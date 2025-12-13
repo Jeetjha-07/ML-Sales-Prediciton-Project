@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ML Models Showcase - Adidas Sales Analytics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(-20px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .animate-fadeIn { animation: fadeIn 0.6s ease-out; }
+        .animate-slideIn { animation: slideIn 0.5s ease-out; }
+        .animate-pulse-slow { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        .animate-spin { animation: spin 1s linear infinite; }
+        
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%);
+            min-height: 100vh;
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .gradient-blue {
+            background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
+        }
+        
+        .gradient-purple {
+            background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+        }
+        
+        .gradient-green {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+        
+        .glow-blue {
+            box-shadow: 0 0 40px rgba(59, 130, 246, 0.5);
+        }
+        
+        .glow-purple {
+            box-shadow: 0 0 40px rgba(168, 85, 247, 0.5);
+        }
+        
+        .glow-green {
+            box-shadow: 0 0 40px rgba(16, 185, 129, 0.5);
+        }
+        
+        .model-card-active {
+            transform: scale(1.05);
+        }
+        
+        .btn-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+        
+        .progress-bar {
+            transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+</head>
+<body class="text-white">
+    <div class="min-h-screen p-4 md:p-8">
+        <!-- Header -->
+        <div class="max-w-7xl mx-auto mb-8 md:mb-12 animate-fadeIn">
+            <div class="flex items-center gap-3 md:gap-4 mb-4">
+                <div class="p-3 md:p-4 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl shadow-lg">
+                    <svg class="w-8 h-8 md:w-12 md:h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-3xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                        ML Models Showcase
+                    </h1>
+                    <p class="text-sm md:text-xl text-gray-300 mt-1 md:mt-2">Adidas Sales Analytics & Prediction Suite</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Model Selection Cards -->
+        <div class="max-w-7xl mx-auto mb-8 animate-fadeIn">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+                <!-- Model 1 Card -->
+                <div id="card-model1" class="glass-card rounded-2xl p-4 md:p-6 cursor-pointer transition-all duration-300 hover:scale-105" onclick="selectModel('model1')">
+                    <div class="flex items-center gap-3 mb-3 md:mb-4">
+                        <div class="p-2 md:p-3 gradient-blue rounded-xl">
+                            <svg class="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg md:text-xl">Total Sales Predictor</h3>
+                            <p class="text-xs md:text-sm text-gray-300">Linear Regression</p>
+                        </div>
+                    </div>
+                    <p class="text-sm md:text-base text-gray-300 mb-3">Predicts total sales using product and regional data</p>
+                    <div class="inline-block px-3 md:px-4 py-1 md:py-2 bg-blue-500/30 rounded-full text-xs md:text-sm font-semibold">
+                        R² Score: <span id="model1-r2">Loading...</span>
+                    </div>
+                </div>
+
+                <!-- Model 2 Card -->
+                <div id="card-model2" class="glass-card rounded-2xl p-4 md:p-6 cursor-pointer transition-all duration-300 hover:scale-105" onclick="selectModel('model2')">
+                    <div class="flex items-center gap-3 mb-3 md:mb-4">
+                        <div class="p-2 md:p-3 gradient-purple rounded-xl">
+                            <svg class="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg md:text-xl">Sales Method Classifier</h3>
+                            <p class="text-xs md:text-sm text-gray-300">Decision Tree</p>
+                        </div>
+                    </div>
+                    <p class="text-sm md:text-base text-gray-300 mb-3">Classifies sales channel: In-store, Outlet, or Online</p>
+                    <div class="inline-block px-3 md:px-4 py-1 md:py-2 bg-purple-500/30 rounded-full text-xs md:text-sm font-semibold">
+                        Accuracy: <span id="model2-acc">Loading...</span>
+                    </div>
+                </div>
+
+                <!-- Model 3 Card -->
+                <div id="card-model3" class="glass-card rounded-2xl p-4 md:p-6 cursor-pointer transition-all duration-300 hover:scale-105" onclick="selectModel('model3')">
+                    <div class="flex items-center gap-3 mb-3 md:mb-4">
+                        <div class="p-2 md:p-3 gradient-green rounded-xl">
+                            <svg class="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg md:text-xl">Units Sold Predictor</h3>
+                            <p class="text-xs md:text-sm text-gray-300">Random Forest</p>
+                        </div>
+                    </div>
+                    <p class="text-sm md:text-base text-gray-300 mb-3">Forecasts units sold based on historical patterns</p>
+                    <div class="inline-block px-3 md:px-4 py-1 md:py-2 bg-green-500/30 rounded-full text-xs md:text-sm font-semibold">
+                        R² Score: <span id="model3-r2">Loading...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
+            <!-- Sidebar - Sample Data -->
+            <div class="lg:col-span-1">
+                <div class="glass-card rounded-2xl p-4 md:p-6 animate-slideIn">
+                    <div class="flex items-center gap-2 mb-4">
+                        <svg class="w-5 h-5 md:w-6 md:h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"></path>
+                        </svg>
+                        <h3 class="font-bold text-xl md:text-2xl">Test Data</h3>
+                    </div>
+                    
+                    <div id="sample-data-container" class="space-y-3 mb-6">
+                        <div class="text-center py-8 text-gray-400">
+                            <svg class="w-12 h-12 mx-auto mb-2 animate-pulse-slow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                            <p class="text-sm">Select a model to view test data</p>
+                        </div>
+                    </div>
+
+                    <button onclick="runPrediction()" id="predict-btn" class="w-full py-3 md:py-4 btn-gradient rounded-xl font-bold transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <span>Run Prediction</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Main Panel -->
+            <div class="lg:col-span-2 space-y-6">
+                <!-- Model Details -->
+                <div class="glass-card rounded-2xl p-4 md:p-6 animate-fadeIn">
+                    <h3 class="font-bold text-xl md:text-2xl mb-4">Model Details</h3>
+                    <div id="model-details">
+                        <div class="text-center py-12 text-gray-400">
+                            <svg class="w-16 h-16 mx-auto mb-4 animate-pulse-slow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                            </svg>
+                            <p>Select a model to view details</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Prediction Results -->
+                <div id="prediction-results" class="hidden glass-card rounded-2xl p-6 md:p-8 animate-fadeIn">
+                    <h3 class="font-bold text-xl md:text-2xl mb-4">🎯 Prediction Result</h3>
+                    <div class="bg-white/10 backdrop-blur rounded-xl p-4 md:p-6">
+                        <p class="text-sm text-gray-300 mb-2">Predicted Value:</p>
+                        <p id="prediction-value" class="text-3xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">-</p>
+                        <div class="mb-4">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-sm text-gray-300">Model Confidence</span>
+                                <span id="confidence-value" class="font-semibold text-lg">-</span>
+                            </div>
+                            <div class="w-full bg-white/20 rounded-full h-3 md:h-4 overflow-hidden">
+                                <div id="confidence-bar" class="h-full bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 rounded-full progress-bar" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <div id="probabilities-container" class="hidden mt-4 pt-4 border-t border-white/20">
+                            <!-- Probabilities for classification will be shown here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Visualization -->
+                <div class="glass-card rounded-2xl p-4 md:p-6 animate-fadeIn">
+                    <h3 class="font-bold text-xl md:text-2xl mb-4">📊 Model Performance Visualization</h3>
+                    <div id="visualization-container" class="bg-white/5 rounded-xl p-4 min-h-[300px]">
+                        <div class="flex items-center justify-center h-64 text-gray-400">
+                            <div class="text-center">
+                                <svg class="w-16 h-16 mx-auto mb-4 animate-pulse-slow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path>
+                                </svg>
+                                <p class="text-sm md:text-base">Select a model to view visualization</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentModel = null;
+        let selectedSampleIndex = 0;
+        let sampleData = null;
+        let modelInfo = {};
+
+        // Load model metrics on page load
+        async function loadModelMetrics() {
+            try {
+                const model1 = await fetch('/api/model-info/model1').then(r => r.json());
+                document.getElementById('model1-r2').textContent = model1.metrics.r2.toFixed(3);
+                modelInfo['model1'] = model1;
+                
+                const model2 = await fetch('/api/model-info/model2').then(r => r.json());
+                document.getElementById('model2-acc').textContent = (model2.metrics.accuracy * 100).toFixed(1) + '%';
+                modelInfo['model2'] = model2;
+                
+                const model3 = await fetch('/api/model-info/model3').then(r => r.json());
+                document.getElementById('model3-r2').textContent = model3.metrics.r2.toFixed(3);
+                modelInfo['model3'] = model3;
+
+                // Load sample data
+                const samples = await fetch('/api/sample-data').then(r => r.json());
+                sampleData = samples.raw;
+            } catch (error) {
+                console.error('Error loading model metrics:', error);
+                alert('Error loading models. Please make sure the Flask server is running.');
+            }
+        }
+
+        async function selectModel(modelId) {
+            currentModel = modelId;
+            selectedSampleIndex = 0;
+            document.getElementById('prediction-results').classList.add('hidden');
+
+            // Highlight selected card
+            document.querySelectorAll('[id^="card-model"]').forEach(card => {
+                card.classList.remove('model-card-active', 'glow-blue', 'glow-purple', 'glow-green');
+            });
+            
+            const selectedCard = document.getElementById('card-' + modelId);
+            selectedCard.classList.add('model-card-active');
+            
+            if (modelId === 'model1') selectedCard.classList.add('glow-blue');
+            if (modelId === 'model2') selectedCard.classList.add('glow-purple');
+            if (modelId === 'model3') selectedCard.classList.add('glow-green');
+
+            try {
+                const info = modelInfo[modelId];
+                
+                // Display model details
+                let metricsHTML = '<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">';
+                
+                if (modelId === 'model1') {
+                    metricsHTML += `
+                        <div class="p-4 bg-white/5 rounded-xl border border-blue-500/30">
+                            <p class="text-sm text-gray-400 mb-1">MAE</p>
+                            <p class="font-semibold text-xl text-blue-400">${info.metrics.mae.toFixed(4)}</p>
+                        </div>
+                        <div class="p-4 bg-white/5 rounded-xl border border-blue-500/30">
+                            <p class="text-sm text-gray-400 mb-1">RMSE</p>
+                            <p class="font-semibold text-xl text-blue-400">${info.metrics.rmse.toFixed(4)}</p>
+                        </div>
+                        <div class="p-4 bg-white/5 rounded-xl border border-blue-500/30 md:col-span-2">
+                            <p class="text-sm text-gray-400 mb-1">R² Score</p>
+                            <p class="font-semibold text-xl text-blue-400">${info.metrics.r2.toFixed(4)}</p>
+                        </div>
+                    `;
+                } else if (modelId === 'model2') {
+                    metricsHTML += `
+                        <div class="p-4 bg-white/5 rounded-xl border border-purple-500/30 md:col-span-2">
+                            <p class="text-sm text-gray-400 mb-1">Accuracy</p>
+                            <p class="font-semibold text-2xl text-purple-400">${(info.metrics.accuracy * 100).toFixed(2)}%</p>
+                        </div>
+                    `;
+                } else if (modelId === 'model3') {
+                    metricsHTML += `
+                        <div class="p-4 bg-white/5 rounded-xl border border-green-500/30">
+                            <p class="text-sm text-gray-400 mb-1">MAE</p>
+                            <p class="font-semibold text-xl text-green-400">${info.metrics.mae.toFixed(2)}</p>
+                        </div>
+                        <div class="p-4 bg-white/5 rounded-xl border border-green-500/30">
+                            <p class="text-sm text-gray-400 mb-1">RMSE</p>
+                            <p class="font-semibold text-xl text-green-400">${info.metrics.rmse.toFixed(2)}</p>
+                        </div>
+                        <div class="p-4 bg-white/5 rounded-xl border border-green-500/30 md:col-span-2">
+                            <p class="text-sm text-gray-400 mb-1">R² Score</p>
+                            <p class="font-semibold text-xl text-green-400">${info.metrics.r2.toFixed(4)}</p>
+                        </div>
+                    `;
+                }
+                metricsHTML += '</div>';
+
+                metricsHTML += `
+                    <div>
+                        <p class="text-sm text-gray-400 mb-3">Input Features (${info.feature_names.length})</p>
+                        <div class="flex flex-wrap gap-2">
+                            ${info.feature_names.map(f => `<span class="px-3 py-1 bg-white/10 rounded-full text-xs md:text-sm border border-white/20">${f}</span>`).join('')}
+                        </div>
+                    </div>
+                `;
+
+                document.getElementById('model-details').innerHTML = metricsHTML;
+
+                // Load visualization
+                document.getElementById('visualization-container').innerHTML = `
+                    <div class="flex items-center justify-center h-64">
+                        <svg class="w-12 h-12 animate-spin text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                        </svg>
+                    </div>
+                `;
+                
+                const viz = await fetch(`/api/visualization/${modelId}`).then(r => r.json());
+                document.getElementById('visualization-container').innerHTML = `<img src="${viz.image}" class="w-full rounded-lg" alt="Model Visualization">`;
+
+                // Load sample data
+                loadSampleData();
+            } catch (error) {
+                console.error('Error loading model:', error);
+                alert('Error loading model details. Please try again.');
+            }
+        }
+
+        function loadSampleData() {
+            if (!sampleData || !currentModel) return;
+
+            const container = document.getElementById('sample-data-container');
+            const samples = sampleData.slice(0, 5);
+            
+            container.innerHTML = samples.map((sample, idx) => {
+                const isSelected = idx === selectedSampleIndex;
+                const gradientClass = currentModel === 'model1' ? 'gradient-blue' : 
+                                     currentModel === 'model2' ? 'gradient-purple' : 'gradient-green';
+                
+                return `
+                    <div class="sample-card p-3 md:p-4 rounded-xl cursor-pointer transition-all ${isSelected ? gradientClass + ' shadow-lg' : 'bg-white/5 hover:bg-white/10 border border-white/10'}" onclick="selectSample(${idx})">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="font-semibold text-sm md:text-base">Sample ${idx + 1}</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </div>
+                        <div class="text-xs md:text-sm text-gray-300 space-y-1">
+                            ${Object.entries(sample).slice(0, 3).map(([key, value]) => `
+                                <div class="flex justify-between">
+                                    <span class="truncate mr-2">${key}:</span>
+                                    <span class="font-medium truncate">${String(value).substring(0, 25)}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function selectSample(index) {
+            selectedSampleIndex = index;
+            loadSampleData();
+            document.getElementById('prediction-results').classList.add('hidden');
+        }
+
+        async function runPrediction() {
+            if (!currentModel || !sampleData) {
+                alert('Please select a model first');
+                return;
+            }
+
+            const btn = document.getElementById('predict-btn');
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = `
+                <svg class="w-5 h-5 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                </svg>
+                <span>Processing...</span>
+            `;
+            btn.disabled = true;
+
+            try {
+                const sample = sampleData[selectedSampleIndex];
+                const response = await fetch(`/api/predict/${currentModel}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(sample)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Prediction failed');
+                }
+
+                const result = await response.json();
+
+                document.getElementById('prediction-value').textContent = result.prediction;
+                document.getElementById('confidence-value').textContent = result.confidence.toFixed(1) + '%';
+                
+                // Animate confidence bar
+                setTimeout(() => {
+                    document.getElementById('confidence-bar').style.width = result.confidence + '%';
+                }, 100);
+
+                // Show probabilities for classification
+                if (result.probabilities && currentModel === 'model2') {
+                    const probContainer = document.getElementById('probabilities-container');
+                    probContainer.classList.remove('hidden');
+                    probContainer.innerHTML = `
+                        <p class="text-sm text-gray-300 mb-3 font-semibold">Class Probabilities:</p>
+                        <div class="space-y-2">
+                            ${Object.entries(result.probabilities).map(([className, prob]) => `
+                                <div>
+                                    <div class="flex justify-between items-center mb-1">
+                                        <span class="text-sm">${className}</span>
+                                        <span class="text-sm font-semibold">${prob.toFixed(1)}%</span>
+                                    </div>
+                                    <div class="w-full bg-white/20 rounded-full h-2 overflow-hidden">
+                                        <div class="h-full bg-gradient-to-r from-purple-400 to-pink-400 rounded-full transition-all duration-1000" style="width: ${prob}%"></div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                } else {
+                    document.getElementById('probabilities-container').classList.add('hidden');
+                }
+
+                document.getElementById('prediction-results').classList.remove('hidden');
+
+                // Scroll to results
+                setTimeout(() => {
+                    document.getElementById('prediction-results').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }, 200);
+            } catch (error) {
+                console.error('Prediction error:', error);
+                alert('Error making prediction. Please check console for details.');
+            } finally {
+                btn.innerHTML = originalHTML;
+                btn.disabled = false;
+            }
+        }
+
+        // Load data on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            loadModelMetrics();
+        });
+    </script>
+</body>
+</html>
