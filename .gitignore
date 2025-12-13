@@ -6,10 +6,6 @@ __pycache__/
 .env
 venv/
 
-# Ignore large data files
-data/raw/*.csv
-data/raw/*.xlsx
-
 # Ignore model binaries
 models/*.pkl
 
